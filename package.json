@@ -5,7 +5,10 @@
   "main": "eslint.config.js",
   "scripts": {
     "test": "jest",
-    "install1-test-deps": "npm install --save-dev jest babel-jest @babel/core @babel/preset-env"
+    "lint": "eslint",
+    "lint-file": "npm run lint -- -f json > lint-results.json",
+    "install1-test-deps": "npm install --save-dev jest babel-jest @babel/core @babel/preset-env",
+    "install2-lint-dependencies": "npm install --save-dev eslint eslint-plugin-import eslint-plugin-n eslint-plugin-promise"
   },
   "repository": {
     "type": "git",
@@ -22,6 +25,10 @@
     "@babel/core": "^7.28.0",
     "@babel/preset-env": "^7.28.0",
     "babel-jest": "^30.0.5",
+    "eslint": "^9.32.0",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-n": "^17.21.3",
+    "eslint-plugin-promise": "^7.2.1",
     "jest": "^30.0.5"
   }
 }
