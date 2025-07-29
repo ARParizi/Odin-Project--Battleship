@@ -1,0 +1,27 @@
+{
+  "name": "odin-project--battleship",
+  "version": "1.0.0",
+  "description": "",
+  "main": "eslint.config.js",
+  "scripts": {
+    "test": "jest",
+    "install1-test-deps": "npm install --save-dev jest babel-jest @babel/core @babel/preset-env"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ARParizi/Odin-Project--Battleship.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ARParizi/Odin-Project--Battleship/issues"
+  },
+  "homepage": "https://github.com/ARParizi/Odin-Project--Battleship#readme",
+  "devDependencies": {
+    "@babel/core": "^7.28.0",
+    "@babel/preset-env": "^7.28.0",
+    "babel-jest": "^30.0.5",
+    "jest": "^30.0.5"
+  }
+}
