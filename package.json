@@ -5,10 +5,17 @@
   "main": "eslint.config.js",
   "scripts": {
     "test": "jest",
+    "start": "webpack serve --open --config webpack.dev.js",
+    "prebuild": "echo BUILDING...",
+    "build": "webpack --config webpack.prod.js",
+    "dev": "webpack serve",
+    "deploy": "git subtree push --prefix dist origin gh-pages",
+    "clean": "rm -rf dist node_modules package-lock.json",
     "lint": "eslint",
     "lint-file": "npm run lint -- -f json > lint-results.json",
     "install1-test-deps": "npm install --save-dev jest babel-jest @babel/core @babel/preset-env",
-    "install2-lint-dependencies": "npm install --save-dev eslint eslint-plugin-import eslint-plugin-n eslint-plugin-promise"
+    "install2-lint-dependencies": "npm install --save-dev eslint eslint-plugin-import eslint-plugin-n eslint-plugin-promise",
+    "install3-webpack-dependencies": "npm install --save-dev webpack-merge webpack-dev-server webpack-cli webpack style-loader html-webpack-plugin css-loader"
   },
   "repository": {
     "type": "git",
@@ -25,10 +32,17 @@
     "@babel/core": "^7.28.0",
     "@babel/preset-env": "^7.28.0",
     "babel-jest": "^30.0.5",
+    "css-loader": "^7.1.2",
     "eslint": "^9.32.0",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-n": "^17.21.3",
     "eslint-plugin-promise": "^7.2.1",
-    "jest": "^30.0.5"
+    "html-webpack-plugin": "^5.6.3",
+    "jest": "^30.0.5",
+    "style-loader": "^4.0.0",
+    "webpack": "^5.101.0",
+    "webpack-cli": "^6.0.1",
+    "webpack-dev-server": "^5.2.2",
+    "webpack-merge": "^6.0.1"
   }
 }
