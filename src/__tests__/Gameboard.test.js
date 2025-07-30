@@ -1,0 +1,126 @@
+import { Gameboard } from '../Gameboard.js';
+import { Ship } from '../Ship.js';
+
+describe("Gameboard Place Ship Test", () => {
+    const board = new Gameboard();
+    test('init to 0 ships', () => {
+        expect(board.numShips()).toBe(0);
+    });
+
+    test('Place Ship Invalid Direction 1', () => {
+        const result = board.placeShipCheck([0,0], 'up', 2);
+        expect(result.possible).toBe(false);
+    });
+
+    test('Place Ship Invalid Direction 2', () => {
+        const result = board.placeShipCheck([0,0], 'left', 2);
+        expect(result.possible).toBe(false);
+    });
+
+    test('Place Ship Start X too low', () => {
+        const result = board.placeShipCheck([-1,0], 'right', 2);
+        expect(result.possible).toBe(false);
+    });
+
+    test('Place Ship Start X too high', () => {
+        const result = board.placeShipCheck([10,0], 'right', 2);
+        expect(result.possible).toBe(false);
+    });
+
+    test('Place Ship End X too high', () => {
+        const result = board.placeShipCheck([8,0], 'right', 3);
+        expect(result.possible).toBe(false);
+    });
+
+    test('Place Ship Start Y too low', () => {
+        const result = board.placeShipCheck([0, -1], 'right', 2);
+        expect(result.possible).toBe(false);
+    });
+
+    test('Place Ship Start Y too high', () => {
+        const result = board.placeShipCheck([0, 10], 'right', 2);
+        expect(result.possible).toBe(false);
+    });
+
+    test('Place Ship End Y too high', () => {
+        const result = board.placeShipCheck([0, 8], 'down', 3);
+        expect(result.possible).toBe(false);
+    });
+
+    test('Valid Place Ship 1', () => {
+        const result = board.placeShipCheck([0, 2], 'right', 2);
+        expect(result.possible).toBe(true);
+    });
+
+    test('Valid Place Ship 2', () => {
+        const result = board.placeShipCheck([0, 8], 'down', 2);
+        expect(result.possible).toBe(true);
+    });
+
+    test('Place Ship @ (5, 4), dir: down, length: 3', () => {
+        const ship = new Ship(3);
+        board.placeShip([5, 4], 'down', ship);
+        expect(board.numShips()).toBe(1);
+    });
+
+    test('Valid Place Ship 3', () => {
+        const result = board.placeShipCheck([2, 1], 'right', 3);
+        expect(result.possible).toBe(true);
+    });
+
+    test('Valid Place Ship 4', () => {
+        const result = board.placeShipCheck([0, 4], 'right', 3);
+        expect(result.possible).toBe(true);
+    });
+
+    test('Valid Place Ship 5', () => {
+        const result = board.placeShipCheck([7, 4], 'right', 3);
+        expect(result.possible).toBe(true);
+    });
+
+    test('Valid Place Ship 6', () => {
+        const result = board.placeShipCheck([7, 4], 'down', 3);
+        expect(result.possible).toBe(true);
+    });
+
+    test('Valid Place Ship 7', () => {
+        const result = board.placeShipCheck([4, 8], 'right', 3);
+        expect(result.possible).toBe(true);
+    });
+
+    test('Valid Place Ship 8', () => {
+        const result = board.placeShipCheck([3, 5], 'right', 1);
+        expect(result.possible).toBe(true);
+    });
+
+    test('Invalid Place Ship 1', () => {
+        const result = board.placeShipCheck([3, 5], 'right', 2);
+        expect(result.possible).toBe(false);
+    });
+
+    test('Invalid Place Ship 2', () => {
+        const result = board.placeShipCheck([3, 5], 'right', 5);
+        expect(result.possible).toBe(false);
+    });
+
+    test('Valid Place Ship 9', () => {
+        const result = board.placeShipCheck([5, 0], 'down', 3);
+        expect(result.possible).toBe(true);
+    });
+
+    test('Invalid Place Ship 3', () => {
+        const result = board.placeShipCheck([5, 0], 'down', 4);
+        expect(result.possible).toBe(false);
+    });
+
+    test('Place Ship @ (2, 4), dir: right, length: 2', () => {
+        const ship = new Ship(2);
+        board.placeShip([2, 4], 'right', ship);
+        expect(board.numShips()).toBe(2);
+    });
+
+    test('Invalid Place Ship 4', () => {
+        const result = board.placeShipCheck([3, 2], 'down', 2);
+        expect(result.possible).toBe(false);
+    });
+});
