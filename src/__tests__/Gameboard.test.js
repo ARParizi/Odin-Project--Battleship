@@ -10,41 +10,49 @@ describe("Gameboard Place Ship Test", () => {
     test('Place Ship Invalid Direction 1', () => {
         const result = board.placeShipCheck([0,0], 'up', 2);
         expect(result.possible).toBe(false);
+        expect(result.error).toBe('Place Ship Direction Undefined');
     });
 
     test('Place Ship Invalid Direction 2', () => {
         const result = board.placeShipCheck([0,0], 'left', 2);
         expect(result.possible).toBe(false);
+        expect(result.error).toBe('Place Ship Direction Undefined');
     });
 
     test('Place Ship Start X too low', () => {
         const result = board.placeShipCheck([-1,0], 'right', 2);
         expect(result.possible).toBe(false);
+        expect(result.error).toBe('Place Ship Position X Out of Bounds');
     });
 
     test('Place Ship Start X too high', () => {
         const result = board.placeShipCheck([10,0], 'right', 2);
         expect(result.possible).toBe(false);
+        expect(result.error).toBe('Place Ship Position X Out of Bounds');
     });
 
     test('Place Ship End X too high', () => {
         const result = board.placeShipCheck([8,0], 'right', 3);
         expect(result.possible).toBe(false);
+        expect(result.error).toBe('Place Ship End Position X Out of Bounds');
     });
 
     test('Place Ship Start Y too low', () => {
         const result = board.placeShipCheck([0, -1], 'right', 2);
         expect(result.possible).toBe(false);
+        expect(result.error).toBe('Place Ship Position Y Out of Bounds');
     });
 
     test('Place Ship Start Y too high', () => {
         const result = board.placeShipCheck([0, 10], 'right', 2);
         expect(result.possible).toBe(false);
+        expect(result.error).toBe('Place Ship Position Y Out of Bounds');
     });
 
     test('Place Ship End Y too high', () => {
         const result = board.placeShipCheck([0, 8], 'down', 3);
         expect(result.possible).toBe(false);
+        expect(result.error).toBe('Place Ship End Position Y Out of Bounds');
     });
 
     test('Valid Place Ship 1', () => {
@@ -96,11 +104,13 @@ describe("Gameboard Place Ship Test", () => {
     test('Invalid Place Ship 1', () => {
         const result = board.placeShipCheck([3, 5], 'right', 2);
         expect(result.possible).toBe(false);
+        expect(result.error).toBe('Place Ship Collision with Other Ships');
     });
 
     test('Invalid Place Ship 2', () => {
         const result = board.placeShipCheck([3, 5], 'right', 5);
         expect(result.possible).toBe(false);
+        expect(result.error).toBe('Place Ship Collision with Other Ships');
     });
 
     test('Valid Place Ship 9', () => {
@@ -111,6 +121,7 @@ describe("Gameboard Place Ship Test", () => {
     test('Invalid Place Ship 3', () => {
         const result = board.placeShipCheck([5, 0], 'down', 4);
         expect(result.possible).toBe(false);
+        expect(result.error).toBe('Place Ship Collision with Other Ships');
     });
 
     test('Place Ship @ (2, 4), dir: right, length: 2', () => {
@@ -122,5 +133,6 @@ describe("Gameboard Place Ship Test", () => {
     test('Invalid Place Ship 4', () => {
         const result = board.placeShipCheck([3, 2], 'down', 2);
         expect(result.possible).toBe(false);
+        expect(result.error).toBe('Place Ship Collision with Other Ships');
     });
 });
