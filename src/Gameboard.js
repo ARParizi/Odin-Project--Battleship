@@ -135,6 +135,12 @@ export class Gameboard {
     }
 
     receiveAttack(pos) {
+        const foundInMisses = this.#findArrayInArray(this.#misses, pos);
+        const foundInHits   = this.#findArrayInArray(this.#hits,   pos);
+
+        if(foundInHits || foundInMisses)
+            throw new Error('Attack already registered');
+
         let hit  = 0;
         
         this.#ships.forEach((ship) => {
@@ -185,5 +191,17 @@ export class Gameboard {
         });
 
         return numSank === this.numShips();
+    }
+
+    #findArrayInArray(array, findPos) {
+        const found = array.find(item =>
+            Array.isArray(item) &&
+            item.length === findPos.length &&
+            item.every((val, i) => val === findPos[i])
+        );
+
+        if(found !== undefined)
+            return true;
+        return false;
     }
 }
