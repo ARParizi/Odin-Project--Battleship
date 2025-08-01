@@ -136,3 +136,51 @@ describe("Gameboard Place Ship Test", () => {
         expect(result.error).toBe('Place Ship Collision with Other Ships');
     });
 });
+
+describe("Gameboard Test Hit, Miss & Sink the Ships", () => {
+    const board = new Gameboard();
+    test('init to 0 ships', () => {
+        expect(board.numShips()).toBe(0);
+    });
+
+    test('Place Ship @ (2, 4), dir: right, length: 2', () => {
+        const ship = new Ship(2);
+        board.placeShip([2, 4], 'right', ship);
+        expect(board.numShips()).toBe(1);
+    });
+
+    test('Place a Hit', () => {
+        let hitArray = board.getHits();
+        expect(hitArray.length).toBe(0);
+        board.receiveAttack([2, 4]);
+        hitArray = board.getHits();
+        expect(hitArray.length).toBe(1);
+        expect(hitArray[0][0]).toBe(2);
+        expect(hitArray[0][1]).toBe(4);
+    });
+
+    test('Place a Miss', () => {
+        let missArray = board.getMisses();
+        expect(missArray.length).toBe(0);
+        board.receiveAttack([2, 3]);
+        let hitArray = board.getHits();
+        expect(hitArray.length).toBe(1);
+        missArray = board.getMisses();
+        expect(missArray.length).toBe(1);
+        expect(missArray[0][0]).toBe(2);
+        expect(missArray[0][1]).toBe(3);
+    });
+
+    test('Sink All Ships', () => {
+        board.receiveAttack([3, 4]);
+        let hitArray = board.getHits();
+        expect(hitArray.length).toBe(2);
+        expect(hitArray[1][0]).toBe(3);
+        expect(hitArray[1][1]).toBe(4);
+        expect(board.allShipsSank()).toBe(true);
+    });
+
+    test('Place repeatative attacks to throw error', () => {
+        expect(() => board.receiveAttack([2, 3])).toThrow();
+    });
+});
