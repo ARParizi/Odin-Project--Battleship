@@ -1,12 +1,16 @@
 export class Gameboard {
     constructor() {
         this.#ships = [];
-        this.hits = [];
-        this.misses = [];
+        this.#hits = [];
+        this.#misses = [];
     }
     #ships;
-
-    numShips = () => this.#ships.length;
+    #hits;
+    #misses;
+    
+    numShips() {
+        return this.#ships.length;
+    }
 
     placeShipCheck(pos, dir, length) {
         let error = '';
@@ -131,18 +135,55 @@ export class Gameboard {
     }
 
     receiveAttack(pos) {
+        let hit  = 0;
+        
+        this.#ships.forEach((ship) => {
+            let isHit = false;
+            if(ship.dir === 'right') {
+                if(ship.pos[1] === pos[1]) {
+                    if(ship.pos[0] <= pos[0] && pos[0] <= ship.pos[0] + ship.length - 1) {
+                        isHit = true;
+                    }
+                }
+            } else {
+                if(ship.pos[0] === pos[0]) {
+                    if(ship.pos[1] <= pos[1] && pos[1] <= ship.pos[1] + ship.length - 1) {
+                        isHit = true;
+                    }
+                }
+            }
 
+            if(isHit === true)
+            {
+                hit++;
+                ship.hit();
+            }
+        });
+
+        if(hit === 1)
+            this.#hits.push(pos.slice());
+        else if (hit === 0)
+            this.#misses.push(pos.slice());
+        else
+            throw new Error('too many hits in receiveAttack function')
     }
 
     getHits() {
-
+        return this.#hits.slice();
     }
 
     getMisses() {
-
+        return this.#misses.slice();
     }
 
     allShipsSank() {
+        let numSank = 0;
+        this.#ships.forEach((ship) => {
+            if(ship.isSunk()) {
+                numSank++;
+            }
+        });
 
+        return numSank === this.numShips();
     }
 }
