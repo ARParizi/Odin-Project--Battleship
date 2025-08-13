@@ -1,3 +1,5 @@
+import { Ship } from "./Ship.js";
+
 export class BoardUI {
     constructor(boardDOM, gameboardObj) {
         this.board = boardDOM;
@@ -13,7 +15,7 @@ export class BoardUI {
             for (let x = 0; x < 10; x++) {
                 const divX = document.createElement('div');
                 divX.className = `x${x}`;
-                divX.innerText =`x${x} y${y}`;
+             // divX.innerText =`x${x} y${y}`;
                 divY.appendChild(divX);
             }
             this.board.appendChild(divY);
@@ -85,19 +87,27 @@ export class BoardUI {
                 const square = this.board.querySelector(`.y${y} > .x${x}`);
                 if(this.gameboardObj.placeShipCheck([x, y], dir, length).possible === false)
                 {
-                    square.addEventListener('mouseover', () => this.placeShipMouseHoverEvent(false, x, y, null, null));
-                    square.addEventListener('mouseout',  () => this.placeShipMouseOutEvent  (false, x, y, null, null));
+                    square.addEventListener('mouseover', () => this.#placeShipMouseHoverEvent(false, x, y, dir, length));
+                    square.addEventListener('mouseout',  () => this.#placeShipMouseOutEvent  (false, x, y, dir, length));
                 } else {
-                    square.addEventListener('mouseover', () => this.placeShipMouseHoverEvent(true, x, y, dir, length));
-                    square.addEventListener('mouseout',  () => this.placeShipMouseOutEvent  (true, x, y, dir, length));
+                    square.addEventListener('mouseover', () => this.#placeShipMouseHoverEvent(true, x, y, dir, length));
+                    square.addEventListener('mouseout',  () => this.#placeShipMouseOutEvent  (true, x, y, dir, length));
+                    square.addEventListener('click',     () => this.#placeShipMouseClickEvent(x, y, dir, length));
                 }
             }
         }
     }
 
-    placeShipMouseHoverEvent(valid, x, y, dir, length) {
+    #placeShipMouseHoverEvent(valid, x, y, dir, length) {
         if(valid === false) {
-            this.board.querySelector(`.y${y} > .x${x}`).classList.add('ship-place-invalid-hover');
+            for (let i = 0; i < length; i++) {
+                if(dir === 'right' && x + i < 10) {
+                    this.board.querySelector(`.y${y} > .x${x + i}`).classList.add('ship-place-invalid-hover');
+                }
+                else if(dir === 'down' && y + i < 10) {
+                    this.board.querySelector(`.y${y + i} > .x${x}`).classList.add('ship-place-invalid-hover');
+                }
+            }
         }
         else if(valid) {
             for (let i = 0; i < length; i++) {
@@ -111,9 +121,16 @@ export class BoardUI {
         }
     }
 
-    placeShipMouseOutEvent(valid, x, y, dir, length) {
+    #placeShipMouseOutEvent(valid, x, y, dir, length) {
         if(valid === false) {
-            this.board.querySelector(`.y${y} > .x${x}`).classList.remove('ship-place-invalid-hover');
+            for (let i = 0; i < length; i++) {
+                if(dir === 'right' && x + i < 10) {
+                    this.board.querySelector(`.y${y} > .x${x + i}`).classList.remove('ship-place-invalid-hover');
+                }
+                else if(dir === 'down' && y + i < 10) {
+                    this.board.querySelector(`.y${y + i} > .x${x}`).classList.remove('ship-place-invalid-hover');
+                }
+            }
         }
         else if(valid) {
             for (let i = 0; i < length; i++) {
@@ -125,5 +142,10 @@ export class BoardUI {
                 }
             }
         }
+    }
+
+    #placeShipMouseClickEvent(x, y, dir, length) {
+        this.gameboardObj.placeShip([x, y], dir, new Ship(length));
+        this.populatePlayerBoard();
     }
 }
