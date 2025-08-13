@@ -3,10 +3,12 @@ export class Gameboard {
         this.#ships = [];
         this.#hits = [];
         this.#misses = [];
+        this.#shipPositions = [];
     }
     #ships;
     #hits;
     #misses;
+    #shipPositions;
     
     numShips() {
         return this.#ships.length;
@@ -125,6 +127,15 @@ export class Gameboard {
         if(this.placeShipCheck(pos, dir, ship.length).possible === false)
             return
 
+        for (let i = 0; i < ship.length; i++) {
+            if (dir === 'right') {
+                this.#shipPositions.push([pos[0] + i, pos[1]]);
+            }
+            else if (dir === 'down') {
+                this.#shipPositions.push([pos[0], pos[1] + i]);
+            }
+        }
+
         this.#ships.push({
             pos,
             dir,
@@ -180,6 +191,10 @@ export class Gameboard {
 
     getMisses() {
         return this.#misses.slice();
+    }
+
+    getShipPositions() {
+        return this.#shipPositions.slice();
     }
 
     allShipsSank() {
