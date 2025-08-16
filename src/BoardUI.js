@@ -39,20 +39,11 @@ export class BoardUI {
     }
 
     renderExclusions() {
-        this.gameboardObj.getHits().forEach(element => {
+        this.gameboardObj.getExclusions().forEach(element => {
             const x = element[0];
             const y = element[1];
-            if(x - 1 >= 0 && y - 1 >= 0)
-                this.board.querySelector(`.y${y - 1} > .x${x - 1}`).classList.add('miss-square');
-
-            if(x + 1 <= 9 && y - 1 >= 0)
-                this.board.querySelector(`.y${y - 1} > .x${x + 1}`).classList.add('miss-square');
-
-            if(x - 1 >= 0 && y + 1 <= 9)
-                this.board.querySelector(`.y${y + 1} > .x${x - 1}`).classList.add('miss-square');
-
-            if(x + 1 <= 9 && y + 1 <= 9)
-                this.board.querySelector(`.y${y + 1} > .x${x + 1}`).classList.add('miss-square');
+            const shipSquare = this.board.querySelector(`.y${y} > .x${x}`);
+            shipSquare.classList.add('exclusion-square');
         });
     }
 

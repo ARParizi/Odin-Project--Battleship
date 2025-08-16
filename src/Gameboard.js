@@ -6,11 +6,13 @@ export class Gameboard {
         this.#hits = [];
         this.#misses = [];
         this.#shipPositions = [];
+        this.#exclusions = [];
     }
     #ships;
     #hits;
     #misses;
     #shipPositions;
+    #exclusions;
     
     numShips() {
         return this.#ships.length;
@@ -149,11 +151,12 @@ export class Gameboard {
     }
 
     receiveAttack(pos) {
-        const foundInMisses = this.#findArrayInArray(this.#misses, pos);
-        const foundInHits   = this.#findArrayInArray(this.#hits,   pos);
+        const foundInMisses     = this.#findArrayInArray(this.#misses,     pos);
+        const foundInHits       = this.#findArrayInArray(this.#hits,       pos);
+        const foundInExclusions = this.#findArrayInArray(this.#exclusions, pos);
 
-        if(foundInHits || foundInMisses)
-            throw new Error('Attack already registered');
+        if(foundInHits || foundInMisses || foundInExclusions)
+            throw new Error('Attack invalid');
 
         let hit  = 0;
         
@@ -180,8 +183,25 @@ export class Gameboard {
             }
         });
 
-        if(hit === 1)
+        if(hit === 1) {
             this.#hits.push(pos.slice());
+
+            if(pos[0] - 1 >= 0 && pos[1] - 1 >= 0) {
+                this.#exclusions.push([pos[0] - 1, pos[1] - 1]);
+            }
+
+            if(pos[0] + 1 < 10 && pos[1] - 1 >= 0) {
+                this.#exclusions.push([pos[0] + 1, pos[1] - 1]);
+            }
+
+            if(pos[0] + 1 < 10 && pos[1] + 1 < 10) {
+                this.#exclusions.push([pos[0] + 1, pos[1] + 1]);
+            }
+
+            if(pos[0] - 1 >= 0 && pos[1] + 1 < 10) {
+                this.#exclusions.push([pos[0] - 1, pos[1] + 1]);
+            }
+        }
         else if (hit === 0)
             this.#misses.push(pos.slice());
         else
@@ -221,5 +241,9 @@ export class Gameboard {
         if(found !== undefined)
             return true;
         return false;
+    }
+
+    getExclusions() {
+        return this.#exclusions.slice();
     }
 }
