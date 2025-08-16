@@ -68,9 +68,9 @@ main {
 }
 
 .ship-place-valid-hover {
-  background-color: #75b64f;
+  background-color: #a3bce2;
 }
 
 .ship-place-invalid-hover {
-  background-color: #fc7766;
+  background-color: #eb9c91;
 }
