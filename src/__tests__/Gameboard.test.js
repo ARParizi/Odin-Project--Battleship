@@ -1,5 +1,4 @@
 import { Gameboard } from '../Gameboard.js';
-import { Ship } from '../Ship.js';
 
 describe("Gameboard Place Ship Test", () => {
     const board = new Gameboard();
@@ -66,8 +65,7 @@ describe("Gameboard Place Ship Test", () => {
     });
 
     test('Place Ship @ (5, 4), dir: down, length: 3', () => {
-        const ship = new Ship(3);
-        board.placeShip([5, 4], 'down', ship);
+        board.placeShip([5, 4], 'down', 3);
         expect(board.numShips()).toBe(1);
     });
 
@@ -125,8 +123,7 @@ describe("Gameboard Place Ship Test", () => {
     });
 
     test('Place Ship @ (2, 4), dir: right, length: 2', () => {
-        const ship = new Ship(2);
-        board.placeShip([2, 4], 'right', ship);
+        board.placeShip([2, 4], 'right', 2);
         expect(board.numShips()).toBe(2);
     });
 
@@ -144,8 +141,7 @@ describe("Gameboard Test Hit, Miss & Sink the Ships", () => {
     });
 
     test('Place Ship @ (2, 4), dir: right, length: 2', () => {
-        const ship = new Ship(2);
-        board.placeShip([2, 4], 'right', ship);
+        board.placeShip([2, 4], 'right', 2);
         expect(board.numShips()).toBe(1);
     });
 
@@ -180,7 +176,7 @@ describe("Gameboard Test Hit, Miss & Sink the Ships", () => {
         expect(board.allShipsSank()).toBe(true);
     });
 
-    test('Place repeatative attacks to throw error', () => {
-        expect(() => board.receiveAttack([2, 3])).toThrow();
+    test('Place repetitive attacks to return check false', () => {
+        expect(board.attackValid([2, 3])).toBe(false);
     });
 });
