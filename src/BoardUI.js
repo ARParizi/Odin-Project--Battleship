@@ -137,4 +137,33 @@ export class BoardUI {
         this.gameboardObj.placeShip([x, y], dir, length);
         this.populatePlayerBoard();
     }
+
+    placeAttackEventListeners() {
+        for (let y = 0; y < 10; y++) {
+            for (let x = 0; x < 10; x++) {
+                const square = this.board.querySelector(`.y${y} > .x${x}`);
+                if(this.gameboardObj.attackValid([x, y]))
+                {
+                    square.addEventListener('mouseover', () => this.#placeAttackMouseHoverEvent(x, y));
+                    square.addEventListener('mouseout',  () => this.#placeAttackMouseOutEvent  (x, y));
+                    square.addEventListener('click',     () => this.#placeAttackMouseClickEvent(x, y));
+                }
+            }
+        }
+    }
+
+    #placeAttackMouseClickEvent(x, y) {
+        this.gameboardObj.receiveAttack([x, y]);
+        this.populateOpponentBoard();
+    }
+
+    #placeAttackMouseHoverEvent(x, y) {
+        const square = this.board.querySelector(`.y${y} > .x${x}`);
+        square.classList.add('attack-hover');
+    }
+
+    #placeAttackMouseOutEvent(x, y) {
+        const square = this.board.querySelector(`.y${y} > .x${x}`);
+        square.classList.remove('attack-hover');
+    }
 }
