@@ -1,3 +1,5 @@
+import { Ship } from './Ship.js';
+
 export class Gameboard {
     constructor() {
         this.#ships = [];
@@ -123,11 +125,11 @@ export class Gameboard {
         return !(outLeft || outRight || outTop || outBottom);
     }
 
-    placeShip(pos, dir, ship) {
-        if(this.placeShipCheck(pos, dir, ship.length).possible === false)
+    placeShip(pos, dir, length) {
+        if(this.placeShipCheck(pos, dir, length).possible === false)
             return
 
-        for (let i = 0; i < ship.length; i++) {
+        for (let i = 0; i < length; i++) {
             if (dir === 'right') {
                 this.#shipPositions.push([pos[0] + i, pos[1]]);
             }
@@ -136,10 +138,11 @@ export class Gameboard {
             }
         }
 
+        const ship = new Ship(length);
         this.#ships.push({
             pos,
             dir,
-            length: ship.length,
+            length: length,
             hit: () => ship.hit(),
             isSunk: () => ship.isSunk()
         })

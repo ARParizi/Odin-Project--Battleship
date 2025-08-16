@@ -29,9 +29,9 @@ playerBoardUI.renderHits();
 playerBoardUI.renderExclusions();
 */
 
-playerGameboard.placeShip([9, 8], 'down', new Ship(2));
-playerGameboard.placeShip([4, 2], 'down', new Ship(3));
-playerGameboard.placeShip([6, 4], 'right', new Ship(4));
+playerGameboard.placeShip([9, 8], 'down',  2);
+playerGameboard.placeShip([4, 2], 'down',  3);
+playerGameboard.placeShip([6, 4], 'right', 4);
 
 
 playerBoardUI.populatePlayerBoard();

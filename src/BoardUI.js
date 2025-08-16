@@ -1,5 +1,3 @@
-import { Ship } from "./Ship.js";
-
 export class BoardUI {
     constructor(boardDOM, gameboardObj) {
         this.board = boardDOM;
@@ -145,7 +143,7 @@ export class BoardUI {
     }
 
     #placeShipMouseClickEvent(x, y, dir, length) {
-        this.gameboardObj.placeShip([x, y], dir, new Ship(length));
+        this.gameboardObj.placeShip([x, y], dir, length);
         this.populatePlayerBoard();
     }
 }
