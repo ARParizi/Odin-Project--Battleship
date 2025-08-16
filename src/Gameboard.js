@@ -150,13 +150,17 @@ export class Gameboard {
         })
     }
 
-    receiveAttack(pos) {
+    attackValid(pos) {
         const foundInMisses     = this.#findArrayInArray(this.#misses,     pos);
         const foundInHits       = this.#findArrayInArray(this.#hits,       pos);
         const foundInExclusions = this.#findArrayInArray(this.#exclusions, pos);
 
-        if(foundInHits || foundInMisses || foundInExclusions)
-            throw new Error('Attack invalid');
+        return !(foundInHits || foundInMisses || foundInExclusions);
+    }
+    
+    receiveAttack(pos) {
+        if (this.attackValid(pos) === false)
+            return;
 
         let hit  = 0;
         
