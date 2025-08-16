@@ -55,6 +55,10 @@ main {
   background-color: #a09999;
 }
 
+.exclusion-square {
+  background-color: #a09999;
+}
+
 .hit-square {
   background-color: #ee7474;
 }
@@ -64,7 +68,7 @@ main {
 }
 
 .attack-hover {
-  background-color: #fff67c;
+  background-color: #f5f0b0;
 }
 
 .ship-place-valid-hover {
