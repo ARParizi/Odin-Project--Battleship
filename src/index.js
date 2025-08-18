@@ -9,33 +9,83 @@ console.log("Hello World from the Battleship project.");
 
 import { BoardUI } from './BoardUI.js';
 import { Gameboard } from './Gameboard.js';
-const playerBoardDOM  = document.querySelector('#player-board');
+import { Lock } from './Lock.js';
+import { ComputerPlayer } from './ComputerPlayer.js';
+
+// Create Player Object
 const playerGameboard = new Gameboard();
-const playerBoardUI   = new BoardUI(playerBoardDOM, playerGameboard);
+const playerBoardUI   = new BoardUI(document.querySelector('#player-board'), playerGameboard);
+playerBoardUI.renderPlayerBoard();
 
-/*
-playerGameboard.receiveAttack([0, 0]);
-playerGameboard.receiveAttack([0, 2]);
-playerGameboard.receiveAttack([4, 3]);
-playerGameboard.receiveAttack([6, 4]);
-playerGameboard.receiveAttack([9, 9]);
+// Create Lock
+const lock = new Lock();
 
-playerBoardUI.renderGrid();
-playerBoardUI.renderShips();
-playerBoardUI.renderMisses();
-playerBoardUI.renderHits();
-playerBoardUI.renderExclusions();
-*/
+const directionButton = document.querySelector('#direction-button');
+const statusDiv = document.querySelector('#status-div');
+let eventHandler = null;
 
-playerGameboard.placeShip([9, 8], 'down',  2);
-playerGameboard.placeShip([4, 2], 'down',  3);
-playerGameboard.placeShip([6, 4], 'right', 4);
-playerGameboard.receiveAttack([0, 0]);
-playerGameboard.receiveAttack([0, 2]);
-playerGameboard.receiveAttack([4, 3]);
-playerGameboard.receiveAttack([6, 4]);
-playerGameboard.receiveAttack([9, 9]);
-//playerBoardUI.populatePlayerBoard();
-//playerBoardUI.placeShipEventListeners('right', 4);
-playerBoardUI.populateOpponentBoard();
-playerBoardUI.placeAttackEventListeners();
+// Place ship of length 5
+let release = null;
+await placeShipUI(5);
+// Place ship of length 4
+await placeShipUI(4);
+// Place ship of length 3A
+await placeShipUI(3);
+// Place ship of length 3B
+await placeShipUI(3);
+// Place ship of length 2
+await placeShipUI(2);
+
+// Create and Render Opponent Board
+release = await lock.acquire();
+const opponentGameboard = new Gameboard();
+const opponentBoardUI   = new BoardUI(document.querySelector('#opponent-board'), opponentGameboard);
+document.querySelector('#direction-button-container').style.display = 'none';
+document.querySelector('#board-container').style.justifyContent = 'space-around';
+opponentBoardUI.renderOpponentBoard();
+
+// Computer place its ships
+const computer = new ComputerPlayer(opponentGameboard, playerGameboard);
+computer.placeShips();
+
+let winner = '';
+while(true) {
+    // Place attack on opponent
+    statusDiv.innerHTML = '<p>Place your attack on the board to the right</p>';
+    opponentBoardUI.placeAttackEventListeners(release);
+    release = await lock.acquire();
+    
+    // Check if player won
+    if(opponentGameboard.allShipsSank()) {
+        winner = 'You';
+        break;
+    }
+
+    // Receive attack
+    computer.placeAttack();
+    playerBoardUI.renderPlayerBoard();
+
+    // Check if computer won
+    if(playerGameboard.allShipsSank()) {
+        winner = 'Computer';
+        break;
+    }
+}
+statusDiv.textContent = `${winner} won! Refresh the page or press F5 to play again.`
+statusDiv.style.fontSize = 'xx-large';
+/* End */
+
+async function placeShipUI(length) {
+    release = await lock.acquire();
+    statusDiv.innerHTML = `<p>Place ship of length ${length}.</p><p>Press the button to toggle between Horizontal and Vertical Direction</p>`;
+
+    if(directionButton.textContent === 'Horizontal')
+        playerBoardUI.placeShipEventListeners('right', length, release);
+    else
+        playerBoardUI.placeShipEventListeners('down', length, release);
+
+    if(!eventHandler)
+        directionButton.removeEventListener('click', eventHandler);
+    eventHandler = () => playerBoardUI.directionButtonClicked(directionButton, length, release);
+    directionButton.addEventListener('click', eventHandler);
+}

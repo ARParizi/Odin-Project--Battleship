@@ -9,29 +9,28 @@ body {
   padding: 0px;
 }
 
-html, body {
-  height: 100%;
-}
-
-.container {
+body {
   display: flex;
-  min-height: 100vh;
-}
-
-main {
-  flex: 1 0 auto;
-  padding: 20px;
-  background-color: hsl(192, 15%, 94%);
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 #board-container {
   display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 50px;
 }
 
 #player-board,
 #opponent-board {
   display: flex;
   flex-direction: column;
+}
+
+#opponent-board {
+  padding-left: 80px;
 }
 
 .y0, .y1, .y2, .y3, .y4, .y5,
@@ -77,4 +76,23 @@ main {
 
 .ship-place-invalid-hover {
   background-color: #eb9c91;
+}
+
+#direction-button-container{
+  width: 200px;
+  margin: 50px;
+  display: block;
+}
+
+#direction-button {
+  font-size: xx-large;
+  margin-right: 20px;
+  padding: 10px 20px;
+}
+
+#status-div {
+  font-size: x-large;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
