@@ -56,21 +56,21 @@ export class BoardUI {
         });    
     }
 
-    populatePlayerBoard() {
+    renderPlayerBoard() {
         this.renderGrid();
         this.renderShips();
         this.renderMisses();
         this.renderHits();
     }
 
-    populateOpponentBoard() {
+    renderOpponentBoard() {
         this.renderGrid();
         this.renderMisses();
         this.renderHits();
         this.renderExclusions();
     }
 
-    placeShipEventListeners(dir, length) {
+    placeShipEventListeners(dir, length, release) {
         for (let y = 0; y < 10; y++) {
             for (let x = 0; x < 10; x++) {
                 const square = this.board.querySelector(`.y${y} > .x${x}`);
@@ -81,7 +81,7 @@ export class BoardUI {
                 } else {
                     square.addEventListener('mouseover', () => this.#placeShipMouseHoverEvent(true, x, y, dir, length));
                     square.addEventListener('mouseout',  () => this.#placeShipMouseOutEvent  (true, x, y, dir, length));
-                    square.addEventListener('click',     () => this.#placeShipMouseClickEvent(x, y, dir, length));
+                    square.addEventListener('click',     () => this.#placeShipMouseClickEvent(x, y, dir, length, release));
                 }
             }
         }
@@ -133,12 +133,13 @@ export class BoardUI {
         }
     }
 
-    #placeShipMouseClickEvent(x, y, dir, length) {
+    #placeShipMouseClickEvent(x, y, dir, length, release) {
         this.gameboardObj.placeShip([x, y], dir, length);
-        this.populatePlayerBoard();
+        this.renderPlayerBoard();
+        release();
     }
 
-    placeAttackEventListeners() {
+    placeAttackEventListeners(release) {
         for (let y = 0; y < 10; y++) {
             for (let x = 0; x < 10; x++) {
                 const square = this.board.querySelector(`.y${y} > .x${x}`);
@@ -146,15 +147,16 @@ export class BoardUI {
                 {
                     square.addEventListener('mouseover', () => this.#placeAttackMouseHoverEvent(x, y));
                     square.addEventListener('mouseout',  () => this.#placeAttackMouseOutEvent  (x, y));
-                    square.addEventListener('click',     () => this.#placeAttackMouseClickEvent(x, y));
+                    square.addEventListener('click',     () => this.#placeAttackMouseClickEvent(x, y, release));
                 }
             }
         }
     }
 
-    #placeAttackMouseClickEvent(x, y) {
+    #placeAttackMouseClickEvent(x, y, release) {
         this.gameboardObj.receiveAttack([x, y]);
-        this.populateOpponentBoard();
+        this.renderOpponentBoard();
+        release();
     }
 
     #placeAttackMouseHoverEvent(x, y) {
@@ -165,5 +167,19 @@ export class BoardUI {
     #placeAttackMouseOutEvent(x, y) {
         const square = this.board.querySelector(`.y${y} > .x${x}`);
         square.classList.remove('attack-hover');
+    }
+
+    directionButtonClicked(button, length, release) {
+        this.renderPlayerBoard();
+        if(button.textContent === 'Horizontal') {
+            button.textContent = 'Vertical';
+            this.placeShipEventListeners('down', length, release);
+        } 
+        else if(button.textContent === 'Vertical') {
+            button.textContent = 'Horizontal';
+            this.placeShipEventListeners('right', length, release);
+        }
+        else
+            throw new Error('Error in directionButtonClicked');
     }
 }
