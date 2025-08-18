@@ -80,11 +80,11 @@ async function placeShipUI(length) {
     statusDiv.innerHTML = `<p>Place ship of length ${length}.</p><p>Press the button to toggle between Horizontal and Vertical Direction</p>`;
 
     if(directionButton.textContent === 'Horizontal')
-        playerBoardUI.placeShipEventListeners('right', length, release);
-    else
         playerBoardUI.placeShipEventListeners('down', length, release);
+    else
+        playerBoardUI.placeShipEventListeners('right', length, release);
 
-    if(!eventHandler)
+    if(eventHandler)
         directionButton.removeEventListener('click', eventHandler);
     eventHandler = () => playerBoardUI.directionButtonClicked(directionButton, length, release);
     directionButton.addEventListener('click', eventHandler);

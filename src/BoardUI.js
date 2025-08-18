@@ -173,11 +173,11 @@ export class BoardUI {
         this.renderPlayerBoard();
         if(button.textContent === 'Horizontal') {
             button.textContent = 'Vertical';
-            this.placeShipEventListeners('down', length, release);
+            this.placeShipEventListeners('right', length, release);
         } 
         else if(button.textContent === 'Vertical') {
             button.textContent = 'Horizontal';
-            this.placeShipEventListeners('right', length, release);
+            this.placeShipEventListeners('down', length, release);
         }
         else
             throw new Error('Error in directionButtonClicked');
